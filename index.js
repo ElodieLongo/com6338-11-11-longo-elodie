@@ -8,9 +8,12 @@ const pipe = (...fns) => firstArg => fns.reduce((returnValue, fn) => fn(returnVa
 
 const makeTag = tag => str => `<${tag}>${str}</${tag}>`
 
+
 // complete this function
 const makePoemHTML = () => {
 // added by Elodie
+//https://www.prepbytes.com/blog/javascript/javascript-onclick-function/
+if (getPoemBtn.clicked == true)
   makeTag('h2')('poem title')
   makeTag('em')('by')
   makeTag('h3')('author name')
