@@ -8,15 +8,42 @@ const pipe = (...fns) => firstArg => fns.reduce((returnValue, fn) => fn(returnVa
 
 const makeTag = tag => str => `<${tag}>${str}</${tag}>`
 
-
 // complete this function
-const makePoemHTML = () => {
-// added by Elodie
-//https://www.prepbytes.com/blog/javascript/javascript-onclick-function/
-if (getPoemBtn.clicked == true)
-  makeTag('h2')('poem title')
-  makeTag('em')('by')
-  makeTag('h3')('author name')
+const makePoemHTML = (poemData) => {
+  const data = poemData[0];
+
+  const title = makeTag('h2')(data.title);
+  const author = pipe(makeTag('em'), makeTag('h3'))('by ' + data.author);
+  const linesArr = getSplittedArray(data.lines, "").map(arr => {
+    let str = arr.map((str, i) => {
+      if (i === arr.length - 1) {
+        return str;
+      }
+      return str + '<br />'
+    })
+    return makeTag('p')(str.join(''))
+  });
+  return title + author + linesArr.join('');
+}
+
+
+function getSplittedArray(arr, aSep) {
+  const acc = [[]];
+  const sp = () => {
+      for (let i = 0; i < arr.length; i++){
+          const item = arr[i];
+          const last = acc[acc.length - 1];
+          
+          if (aSep.indexOf(item) > -1){
+              acc.push([]);
+          }else{
+              last.push(item);
+          }
+      };
+  };
+  sp();
+  
+  return acc;
 }
 
 // attach a click event to #get-poem
@@ -24,3 +51,4 @@ getPoemBtn.onclick = async function() {
   // renders the HTML string returned by makePoemHTML to #poem
   poemEl.innerHTML = makePoemHTML(await getJSON(poemURL))
 }
+
